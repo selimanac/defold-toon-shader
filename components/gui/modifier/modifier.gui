@@ -1,0 +1,96 @@
+script: ""
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "btn_minus"
+  pivot: PIVOT_W
+  layer: "gfx"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 10.0
+  }
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  color {
+    x: 0.102
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_TEXT
+  text: "-"
+  font: "default"
+  id: "text-minus"
+  parent: "btn_minus"
+  layer: "text"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 27.0
+  }
+  size {
+    x: 30.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "0.00"
+  font: "default"
+  id: "value"
+  pivot: PIVOT_W
+  layer: "text"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 66.0
+  }
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "btn_plus"
+  pivot: PIVOT_W
+  layer: "gfx"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 10.0
+  }
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  color {
+    x: 0.102
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_TEXT
+  text: "+"
+  font: "default"
+  id: "text-plus"
+  parent: "btn_plus"
+  layer: "text"
+  inherit_alpha: true
+}
+layers {
+  name: "gfx"
+}
+layers {
+  name: "text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

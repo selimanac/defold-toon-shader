@@ -1,0 +1,57 @@
+local models = require("scripts.models")
+local toon_nodes = {}
+local toon_nodes_count = 0
+local input_node = {}
+
+
+local function update_constant(node, value)
+	msg.post('/script#main', models.msg_update_constant, { constant = node.constant, constant_value = value })
+	gui.set_text(node.value_text, value)
+end
+
+local function add_node(constant, value_max, value_min, muti, constant_value)
+	local temp = {
+		value_text = gui.get_node(constant .. '/value'),
+		value_max = value_max,
+		value_min = value_min,
+		muti = muti,
+		constant_value = constant_value,
+		btn_minus = gui.get_node(constant .. '/btn_minus'),
+		btn_plus = gui.get_node(constant .. '/btn_plus'),
+		constant = constant
+	}
+	toon_nodes_count = toon_nodes_count + 1
+	toon_nodes[toon_nodes_count] = temp
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+
+	add_node('toon_light_smooth_interpolation', 100, 0, 100, 0.0)
+	add_node('toon_rim_smooth', 100, 0, 100, 0.0)
+	add_node('toon_specular_smooth', 100, 1, 100, 0.0)
+end
+
+local function inc_value(node)
+	node.constant_value = math.min(node.constant_value + 1, node.value_max)
+	update_constant(node, node.constant_value / node.muti)
+end
+
+local function dec_value(node)
+	node.constant_value = math.max(node.constant_value - 1, node.value_min)
+	update_constant(node, node.constant_value / node.muti)
+end
+
+function on_input(_, _, action)
+	for i = 1, toon_nodes_count do
+		input_node = toon_nodes[i]
+
+		if gui.pick_node(input_node.btn_minus, action.x, action.y) and action.repeated then
+			dec_value(input_node)
+		end
+
+		if gui.pick_node(input_node.btn_plus, action.x, action.y) and action.repeated then
+			inc_value(input_node)
+		end
+	end
+end

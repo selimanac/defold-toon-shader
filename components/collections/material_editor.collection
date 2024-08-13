@@ -1,0 +1,101 @@
+name: "main"
+instances {
+  id: "camera"
+  prototype: "/components/go/camera/camera.go"
+  component_properties {
+    id: "orbit"
+    properties {
+      id: "target"
+      value: "/sphere"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "distance"
+      value: "200.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "distance_min"
+      value: "100.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "distance_max"
+      value: "800.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "angle_x"
+      value: "-0.06"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "angle_y"
+      value: "-0.06"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "angle_max"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "script"
+  data: "components {\n"
+  "  id: \"main\"\n"
+  "  component: \"/scripts/material_editor.script\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "light"
+  data: ""
+  position {
+    x: 150.0
+    y: 250.0
+    z: 180.0
+  }
+}
+embedded_instances {
+  id: "models"
+  children: "sphere"
+  data: ""
+}
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"material_editor\"\n"
+  "  component: \"/components/gui/material_editor.gui\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "sphere"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/builtins/assets/meshes/sphere.dae\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/white.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    z: -129.0
+  }
+  scale3 {
+    x: 70.0
+    y: 70.0
+    z: 70.0
+  }
+}

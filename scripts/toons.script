@@ -1,0 +1,15 @@
+local models = require("scripts.models")
+
+local light_position = vmath.vector3()
+
+function init(self)
+	profiler.enable_ui(false)
+	light_position = go.get_position('/light')
+	models.init(light_position)
+end
+
+function on_message(self, message_id, message, _)
+	if message_id == models.msg_update_constant then
+		models.set_constant(message.constant, message.constant_value)
+	end
+end

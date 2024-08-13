@@ -1,0 +1,204 @@
+script: "/scripts/gui/test.gui_script"
+fonts {
+  name: "default"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  size {
+    x: 380.0
+    y: 120.0
+  }
+  color {
+    x: 0.102
+    y: 0.102
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "container"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 275.0
+    y: 24.0
+  }
+  type: TYPE_TEMPLATE
+  id: "toon_light_smooth_interpolation"
+  parent: "container"
+  inherit_alpha: true
+  template: "/components/gui/modifier/modifier.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_light_smooth_interpolation/btn_minus"
+  parent: "toon_light_smooth_interpolation"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_light_smooth_interpolation/text-minus"
+  parent: "toon_light_smooth_interpolation/btn_minus"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_light_smooth_interpolation/value"
+  parent: "toon_light_smooth_interpolation"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_light_smooth_interpolation/btn_plus"
+  parent: "toon_light_smooth_interpolation"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_light_smooth_interpolation/text-plus"
+  parent: "toon_light_smooth_interpolation/btn_plus"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 16.0
+    y: 25.0
+  }
+  size {
+    x: 200.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "toon_light_smooth_interpolation"
+  font: "default"
+  id: "light_smooth_interpolation"
+  pivot: PIVOT_W
+  parent: "container"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 275.0
+    y: 59.0
+  }
+  type: TYPE_TEMPLATE
+  id: "toon_rim_smooth"
+  parent: "container"
+  inherit_alpha: true
+  template: "/components/gui/modifier/modifier.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_rim_smooth/btn_minus"
+  parent: "toon_rim_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_rim_smooth/text-minus"
+  parent: "toon_rim_smooth/btn_minus"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_rim_smooth/value"
+  parent: "toon_rim_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_rim_smooth/btn_plus"
+  parent: "toon_rim_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_rim_smooth/text-plus"
+  parent: "toon_rim_smooth/btn_plus"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 16.0
+    y: 60.0
+  }
+  size {
+    x: 200.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "toon_rim_smooth"
+  font: "default"
+  id: "rim_smooth"
+  pivot: PIVOT_W
+  parent: "container"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 275.0
+    y: 92.0
+  }
+  type: TYPE_TEMPLATE
+  id: "toon_specular_smooth"
+  parent: "container"
+  inherit_alpha: true
+  template: "/components/gui/modifier/modifier.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_specular_smooth/btn_minus"
+  parent: "toon_specular_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_specular_smooth/text-minus"
+  parent: "toon_specular_smooth/btn_minus"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_specular_smooth/value"
+  parent: "toon_specular_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "toon_specular_smooth/btn_plus"
+  parent: "toon_specular_smooth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "toon_specular_smooth/text-plus"
+  parent: "toon_specular_smooth/btn_plus"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 16.0
+    y: 93.0
+  }
+  size {
+    x: 200.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "specular_smooth"
+  font: "default"
+  id: "specular_smooth"
+  pivot: PIVOT_W
+  parent: "container"
+  inherit_alpha: true
+}
+layers {
+  name: "gfx"
+}
+layers {
+  name: "text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

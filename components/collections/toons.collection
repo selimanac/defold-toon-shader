@@ -1,0 +1,359 @@
+name: "main"
+instances {
+  id: "camera"
+  prototype: "/components/go/camera/camera.go"
+  component_properties {
+    id: "orbit"
+    properties {
+      id: "target"
+      value: "/camera_orbit_target"
+      type: PROPERTY_TYPE_HASH
+    }
+    properties {
+      id: "distance"
+      value: "560.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "distance_min"
+      value: "200.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "distance_max"
+      value: "800.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "angle_max"
+      value: "20.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "script"
+  data: "components {\n"
+  "  id: \"main\"\n"
+  "  component: \"/scripts/toons.script\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "camera_orbit_target"
+  data: ""
+  position {
+    y: 23.0
+  }
+}
+embedded_instances {
+  id: "light"
+  data: ""
+  position {
+    x: 150.0
+    y: 250.0
+    z: 180.0
+  }
+}
+embedded_instances {
+  id: "models"
+  children: "ball"
+  children: "bear"
+  children: "cone"
+  children: "cylinder"
+  children: "dog"
+  children: "duck"
+  children: "sphere"
+  children: "torus"
+  data: ""
+}
+embedded_instances {
+  id: "cone"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/cone.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/grey-light.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 26.0
+    y: 12.0
+  }
+}
+embedded_instances {
+  id: "cylinder"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/cylinder.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/grey-light.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: -123.0
+  }
+}
+embedded_instances {
+  id: "sphere"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/builtins/assets/meshes/sphere.dae\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/grey-light.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: -262.0
+    y: 40.0
+  }
+  scale3 {
+    x: 80.0
+    y: 80.0
+    z: 80.0
+  }
+}
+embedded_instances {
+  id: "torus"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/torus.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/grey-light.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 194.0
+    y: 47.0
+  }
+}
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"test\"\n"
+  "  component: \"/components/gui/modifier.gui\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "bear"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/characters/character_bear.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"Black\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/bear_black.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"BrownDark.007\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/bear_brown.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: -152.0
+    z: 125.0
+  }
+  scale3 {
+    x: 70.0
+    y: 70.0
+    z: 70.0
+  }
+}
+embedded_instances {
+  id: "dog"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/characters/character_dog.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"Beige.003\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/dog-beige.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"Black.001\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/bear_black.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"Red\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/dog_red.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: -1.271429\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 89.0
+    z: 126.0
+  }
+  scale3 {
+    x: 70.0
+    y: 70.0
+    z: 70.0
+  }
+}
+embedded_instances {
+  id: "duck"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/characters/character_duck.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"Black.002\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/bear_black.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"White.004\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/duck_white.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"Yellow\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/duck_yellow.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.200001\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 143.0
+    z: 126.0
+  }
+  scale3 {
+    x: 70.0
+    y: 70.0
+    z: 70.0
+  }
+}
+embedded_instances {
+  id: "ball"
+  data: "embedded_components {\n"
+  "  id: \"model\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/assets/models/ball.glb\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"Blue\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/ball-blue.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"Red.001\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/dog_red.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"White.005\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/duck_white.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "materials {\\n"
+  "  name: \\\"Yellow.001\\\"\\n"
+  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"tex0\\\"\\n"
+  "    texture: \\\"/assets/textures/duck_yellow.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    z: -202.0
+  }
+  rotation {
+    y: -0.23837146
+    w: 0.971174
+  }
+  scale3 {
+    x: 70.0
+    y: 70.0
+    z: 70.0
+  }
+}

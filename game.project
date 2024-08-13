@@ -1,0 +1,35 @@
+[bootstrap]
+main_collection = /components/collections/toons.collectionc
+render = /builtins/render/default.renderc
+
+[script]
+shared_state = 1
+
+[display]
+width = 1280
+height = 720
+vsync = 1
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = Toon Shader
+dependencies = 
+
+[render]
+clear_color_red = 1.0
+clear_color_green = 1.0
+clear_color_blue = 1.0
+clear_color_alpha = 1.0
+
+[input]
+repeat_interval = 0.0
+repeat_delay = 0.0
+
+[profiler]
+track_cpu = 1
+
+[native_extension]
+app_manifest = /manifest/game.appmanifest
+
