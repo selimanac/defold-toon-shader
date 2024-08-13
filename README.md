@@ -2,9 +2,10 @@
 
 ![Toon](/.github/defold-toons-smooth.png?raw=true)
 
-# Defold Toon Shader (aka pong/cell shader)
+# Defold Toon Shader
 
 Use `toon_local_depricated.material` or `toon_world_depricated.material` for depricated OpenGL.  
+
 Use `toon_world.material` or `toon_local.material` with VULKAN for GLSL >= 3.3  and Defold >= 1.9.2 
 
 ### Shader Constants
