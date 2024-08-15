@@ -4,7 +4,7 @@
 
 # Defold Toon Shader
 
-Use `toon_local_depricated.material` or `toon_world_depricated.material` for depricated OpenGL.  
+Use `toon_local_legacy.material` or `toon_world_legacy.material` for [legacy pipeline](https://defold.com/manuals/shader/#writing-modern-glsl-shaders).  
 
 Use `toon_world.material` or `toon_local.material` with VULKAN for GLSL >= 3.3  and Defold >= 1.9.2 
 

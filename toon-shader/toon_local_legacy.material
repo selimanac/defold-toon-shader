@@ -1,7 +1,7 @@
 name: "toon"
 tags: "model"
-vertex_program: "/toon-shader/toon_depricated.vp"
-fragment_program: "/toon-shader/toon_depricated.fp"
+vertex_program: "/toon-shader/toon_legacy.vp"
+fragment_program: "/toon-shader/toon_legacy.fp"
 vertex_space: VERTEX_SPACE_LOCAL
 vertex_constants {
   name: "mtx_worldview"
