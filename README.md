@@ -13,9 +13,9 @@ Use `toon_world.material` or `toon_local.material` for new pipeline Defold >= 1.
 All constants must be `vmath.vector4()` but only some components are used:  
 
 
-`light`(x, y, z) -  Light position   
-`camera_position`(x, y, z) -  Camera position     
-`toon_color`(x, y, z)  -  Diffuse color   	
+`light`(x, y, z) -  Light position  
+`camera_position`(x, y, z) -  Camera position  
+`toon_color`(x, y, z)  -  Diffuse color  
 `toon_ambient_color`(x, y, z)  -  Shadow color   
 `toon_specular_color`(x, y, z) -   Specular_color   
 `toon_glossiness`(x)  - Glossiness amount    
