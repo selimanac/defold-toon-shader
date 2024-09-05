@@ -1,5 +1,4 @@
 local models = require("scripts.models")
-
 local light_position = vmath.vector3()
 
 function init(self)

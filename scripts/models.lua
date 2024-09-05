@@ -26,14 +26,14 @@ local model_settings = {
 
 	},
 	['/sphere#model'] = {
-		toon_color = vmath.vector4(0.49803925, 0.6489124, 1, 1.0),
-		toon_ambient_color = vmath.vector4(0.9, 0.9, 0.9, 1.0),
-		toon_specular_color = vmath.vector4(0.9, 0.9, 0.9, 1.0),
+		toon_color = vmath.vector4(0.5, 0.5, 0.75, 1.0),
+		toon_ambient_color = vmath.vector4(0.5, 0.5, 0.75, 1.0),
+		toon_specular_color = vmath.vector4(0.5, 0.5, 0.8, 1.0),
 		toon_glossiness = vmath.vector4(32),
 		toon_rim_color = vmath.vector4(0.2, 0.2, 0.2, 1.0),
-		toon_rim_amount = vmath.vector4(0.916),
-		toon_rim_threshold = vmath.vector4(0.1),
-		toon_light_smooth_interpolation = vmath.vector4(0.1),
+		toon_rim_amount = vmath.vector4(0.7),
+		toon_rim_threshold = vmath.vector4(0.01),
+		toon_light_smooth_interpolation = vmath.vector4(0.01),
 		toon_rim_smooth = vmath.vector4(0.01),
 		toon_specular_smooth = vmath.vector4(0.01)
 	},
@@ -75,11 +75,13 @@ local model_settings = {
 		--	toon_color = vmath.vector4(218 / 255, 174 / 255, 126 / 255, 1.0),
 		--	toon_ambient_color = vmath.vector4(218 / 255, 174 / 255, 126 / 255, 1.0),
 		--	toon_specular_color = vmath.vector4(2.2870936, 2.2870936, 2.2870936, 1),
-		toon_glossiness = vmath.vector4(20),
+		--	toon_glossiness = vmath.vector4(20),
 		--	toon_rim_color = vmath.vector4(1, 1, 1, 1),
-		toon_rim_amount = vmath.vector4(0.7)
+		--	toon_rim_amount = vmath.vector4(0.7),
+
 	},
 }
+
 
 models.list = {}
 
@@ -98,6 +100,7 @@ end
 function models.init(light_position)
 	models.list = model_settings
 	update_models(light_position)
+	models.set_camera_position(go.get_position('/camera'))
 end
 
 function models.init_model(model_id, light_position)

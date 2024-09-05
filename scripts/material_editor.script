@@ -1,11 +1,15 @@
 local models = require("scripts.models")
 
+
 local light_position = vmath.vector3()
 
 function init(self)
 	profiler.enable_ui(false)
+
 	light_position = go.get_position('/light')
+
 	models.init_model('/sphere#model', light_position)
+
 	msg.post('/gui#material_editor', models.msg_update_dafault_values, { model_id = '/sphere#model' })
 end
 

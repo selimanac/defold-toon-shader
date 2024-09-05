@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /components/collections/toons.collectionc
+main_collection = /components/collections/material_editor.collectionc
 render = /builtins/render/default.renderc
 
 [script]
@@ -29,7 +29,4 @@ repeat_delay = 0.0
 
 [profiler]
 track_cpu = 1
-
-[native_extension]
-app_manifest = /manifest/game.appmanifest
 

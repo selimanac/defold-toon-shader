@@ -81,7 +81,7 @@ embedded_instances {
   "name: \\\"{{NAME}}\\\"\\n"
   "materials {\\n"
   "  name: \\\"default\\\"\\n"
-  "  material: \\\"/toon-shader/toon_local.material\\\"\\n"
+  "  material: \\\"/toon_shader/toon_local.material\\\"\\n"
   "  textures {\\n"
   "    sampler: \\\"tex0\\\"\\n"
   "    texture: \\\"/assets/textures/white.png\\\"\\n"
