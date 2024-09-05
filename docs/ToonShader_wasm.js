@@ -294,7 +294,7 @@ var isFileURI = function isFileURI(filename) {
   return filename.startsWith("file://");
 };
 var wasmBinaryFile;
-wasmBinaryFile = "dmengine_release.wasm";
+wasmBinaryFile = "dmengine.wasm";
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }
@@ -361,8 +361,8 @@ function createWasm() {
   };
   function receiveInstance(instance, module) {
     wasmExports = instance.exports;
-    wasmTable = wasmExports["Vh"];
-    addOnInit(wasmExports["Qh"]);
+    wasmTable = wasmExports["Qh"];
+    addOnInit(wasmExports["Lh"]);
     removeRunDependency("wasm-instantiate");
     return wasmExports;
   }
@@ -384,14 +384,14 @@ function createWasm() {
 var tempDouble;
 var tempI64;
 var ASM_CONSTS = {
-  277592: function _() {
+  251360: function _() {
     if (navigator.userAgent.toLowerCase().indexOf("chrome") > -1) {
       console.log("%c    %c    Made with Defold    %c    %c    https://www.defold.com", "background: #fd6623; padding:5px 0; border: 5px;", "background: #272c31; color: #fafafa; padding:5px 0;", "background: #39a3e4; padding:5px 0;", "background: #ffffff; color: #000000; padding:5px 0;");
     } else {
       console.log("Made with Defold -=[ https://www.defold.com ]=-");
     }
   },
-  278020: function _($0) {
+  251788: function _($0) {
     var jsResult;
     var isSuccess = 1;
     try {
@@ -405,13 +405,13 @@ var ASM_CONSTS = {
     var stringOnWasmHeap = stringToNewUTF8(jsResult);
     return stringOnWasmHeap;
   },
-  278288: function _() {
+  252056: function _() {
     document.removeEventListener("click", Module.__defold_interaction_listener);
     document.removeEventListener("keyup", Module.__defold_interaction_listener);
     document.removeEventListener("touchend", Module.__defold_interaction_listener);
     Module.__defold_interaction_listener = undefined;
   },
-  278576: function _() {
+  252344: function _() {
     Module.__defold_interaction_listener = function () {
       _dmScript_RunInteractionCallback();
     };
@@ -419,10 +419,10 @@ var ASM_CONSTS = {
     document.addEventListener("keyup", Module.__defold_interaction_listener);
     document.addEventListener("touchend", Module.__defold_interaction_listener);
   },
-  278897: function _($0) {
+  252665: function _($0) {
     Module.printErr(UTF8ToString($0));
   },
-  278936: function _($0) {
+  252704: function _($0) {
     Module.print(UTF8ToString($0));
   }
 };
@@ -436,30 +436,6 @@ var callRuntimeCallbacks = function callRuntimeCallbacks(callbacks) {
     callbacks.shift()(Module);
   }
 };
-function getValue(ptr) {
-  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "i8";
-  if (type.endsWith("*")) type = "*";
-  switch (type) {
-    case "i1":
-      return HEAP8[ptr];
-    case "i8":
-      return HEAP8[ptr];
-    case "i16":
-      return HEAP16[ptr >> 1];
-    case "i32":
-      return HEAP32[ptr >> 2];
-    case "i64":
-      abort("to do getValue(i64) use WASM_BIGINT");
-    case "float":
-      return HEAPF32[ptr >> 2];
-    case "double":
-      return HEAPF64[ptr >> 3];
-    case "*":
-      return HEAPU32[ptr >> 2];
-    default:
-      abort("invalid type for getValue: ".concat(type));
-  }
-}
 var noExitRuntime = Module["noExitRuntime"] || true;
 function setValue(ptr, value) {
   var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "i8";
@@ -4475,124 +4451,6 @@ var __tzset_js = function __tzset_js(timezone, daylight, std_name, dst_name) {
 var _abort = function _abort() {
   abort("");
 };
-var DefoldSoundDevice = {
-  TryResumeAudio: function TryResumeAudio() {
-    var audioCtx = window._dmJSDeviceShared.audioCtx;
-    if (audioCtx !== undefined && audioCtx.state != "running") {
-      audioCtx.resume();
-    }
-  }
-};
-function _dmDeviceJSFreeBufferSlots(id) {
-  return window._dmJSDeviceShared.devices[id]._freeBufferSlots();
-}
-function _dmDeviceJSOpen(bufferCount) {
-  var shared = window._dmJSDeviceShared;
-  if (shared === undefined) {
-    shared = {
-      count: 0,
-      devices: {}
-    };
-    window._dmJSDeviceShared = shared;
-  }
-  var id = shared.count++;
-  var device;
-  if (window.AudioContext || window.webkitAudioContext) {
-    if (shared.audioCtx === undefined) {
-      var audioCtxCtor = window.AudioContext || window.webkitAudioContext;
-      try {
-        shared.audioCtx = new audioCtxCtor({
-          sampleRate: 44100
-        });
-      } catch (e) {
-        shared.audioCtx = new audioCtxCtor();
-      }
-    }
-    device = {
-      sampleRate: shared.audioCtx.sampleRate,
-      bufferedTo: 0,
-      bufferDuration: 0,
-      creatingTime: Date.now() / 1e3,
-      lastTimeInSuspendedState: Date.now() / 1e3,
-      suspendedBufferedTo: 0,
-      _isContextRunning: function _isContextRunning() {
-        var audioCtx = window._dmJSDeviceShared.audioCtx;
-        return audioCtx !== undefined && audioCtx.state == "running";
-      },
-      _getCurrentSuspendedTime: function _getCurrentSuspendedTime() {
-        if (!this._isContextRunning()) {
-          this.lastTimeInSuspendedState = Date.now() / 1e3;
-          return this.lastTimeInSuspendedState - this.creatingTime;
-        }
-        return 0;
-      },
-      _queue: function _queue(samples, sample_count) {
-        var len = sample_count / this.sampleRate;
-        this.bufferDuration = len;
-        if (!this._isContextRunning()) {
-          this.suspendedBufferedTo += len;
-          return;
-        }
-        var buf = shared.audioCtx.createBuffer(2, sample_count, this.sampleRate);
-        var c0 = buf.getChannelData(0);
-        var c1 = buf.getChannelData(1);
-        for (var i = 0; i < sample_count; i++) {
-          c0[i] = getValue(samples + 4 * i, "i16") / 32768;
-          c1[i] = getValue(samples + 4 * i + 2, "i16") / 32768;
-        }
-        var source = shared.audioCtx.createBufferSource();
-        source.buffer = buf;
-        source.connect(shared.audioCtx.destination);
-        var t = shared.audioCtx.currentTime;
-        if (this.bufferedTo <= t) {
-          source.start(t);
-          this.bufferedTo = t + len;
-        } else {
-          source.start(this.bufferedTo);
-          this.bufferedTo = this.bufferedTo + len;
-        }
-      },
-      _freeBufferSlots: function _freeBufferSlots() {
-        var ahead = 0;
-        if (this._isContextRunning()) {
-          if (this.bufferDuration == 0) return 1;
-          ahead = this.bufferedTo - shared.audioCtx.currentTime;
-        } else {
-          ahead = this.suspendedBufferedTo - this._getCurrentSuspendedTime();
-        }
-        var inqueue = Math.ceil(ahead / this.bufferDuration);
-        if (inqueue < 0) {
-          inqueue = 0;
-        }
-        var left = bufferCount - inqueue;
-        if (left < 0) {
-          return 0;
-        }
-        return left;
-      }
-    };
-  }
-  if (device != null) {
-    shared.audioCtx.onstatechanged = function () {
-      if (device._isContextRunning()) {
-        device.timeInSuspendedState = Date.now() / 1e3;
-      } else {
-        device.creatingTime = Date.now() / 1e3;
-        device.lastTimeInSuspendedState = Date.now() / 1e3;
-        device.suspendedBufferedTo = 0;
-      }
-    };
-    shared.devices[id] = device;
-    return id;
-  }
-  return -1;
-}
-function _dmDeviceJSQueue(id, samples, sample_count) {
-  window._dmJSDeviceShared.devices[id]._queue(samples, sample_count);
-}
-function _dmGetDeviceSampleRate(id) {
-  return window._dmJSDeviceShared.devices[id].sampleRate;
-}
 var wasmTableMirror = [];
 var wasmTable;
 var getWasmTableEntry = function getWasmTableEntry(funcPtr) {
@@ -5504,8 +5362,62 @@ var _emscripten_date_now = function _emscripten_date_now() {
 var getHeapMax = function getHeapMax() {
   return 2147483648;
 };
-var _emscripten_get_heap_max = function _emscripten_get_heap_max() {
-  return getHeapMax();
+var webgl_enable_ANGLE_instanced_arrays = function webgl_enable_ANGLE_instanced_arrays(ctx) {
+  var ext = ctx.getExtension("ANGLE_instanced_arrays");
+  if (ext) {
+    ctx["vertexAttribDivisor"] = function (index, divisor) {
+      return ext["vertexAttribDivisorANGLE"](index, divisor);
+    };
+    ctx["drawArraysInstanced"] = function (mode, first, count, primcount) {
+      return ext["drawArraysInstancedANGLE"](mode, first, count, primcount);
+    };
+    ctx["drawElementsInstanced"] = function (mode, count, type, indices, primcount) {
+      return ext["drawElementsInstancedANGLE"](mode, count, type, indices, primcount);
+    };
+    return 1;
+  }
+};
+var webgl_enable_OES_vertex_array_object = function webgl_enable_OES_vertex_array_object(ctx) {
+  var ext = ctx.getExtension("OES_vertex_array_object");
+  if (ext) {
+    ctx["createVertexArray"] = function () {
+      return ext["createVertexArrayOES"]();
+    };
+    ctx["deleteVertexArray"] = function (vao) {
+      return ext["deleteVertexArrayOES"](vao);
+    };
+    ctx["bindVertexArray"] = function (vao) {
+      return ext["bindVertexArrayOES"](vao);
+    };
+    ctx["isVertexArray"] = function (vao) {
+      return ext["isVertexArrayOES"](vao);
+    };
+    return 1;
+  }
+};
+var webgl_enable_WEBGL_draw_buffers = function webgl_enable_WEBGL_draw_buffers(ctx) {
+  var ext = ctx.getExtension("WEBGL_draw_buffers");
+  if (ext) {
+    ctx["drawBuffers"] = function (n, bufs) {
+      return ext["drawBuffersWEBGL"](n, bufs);
+    };
+    return 1;
+  }
+};
+var webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance = function webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance(ctx) {
+  return !!(ctx.dibvbi = ctx.getExtension("WEBGL_draw_instanced_base_vertex_base_instance"));
+};
+var webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance = function webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance(ctx) {
+  return !!(ctx.mdibvbi = ctx.getExtension("WEBGL_multi_draw_instanced_base_vertex_base_instance"));
+};
+var webgl_enable_WEBGL_multi_draw = function webgl_enable_WEBGL_multi_draw(ctx) {
+  return !!(ctx.multiDrawWebgl = ctx.getExtension("WEBGL_multi_draw"));
+};
+var getEmscriptenSupportedExtensions = function getEmscriptenSupportedExtensions(ctx) {
+  var supportedExtensions = ["ANGLE_instanced_arrays", "EXT_blend_minmax", "EXT_disjoint_timer_query", "EXT_frag_depth", "EXT_shader_texture_lod", "EXT_sRGB", "OES_element_index_uint", "OES_fbo_render_mipmap", "OES_standard_derivatives", "OES_texture_float", "OES_texture_half_float", "OES_texture_half_float_linear", "OES_vertex_array_object", "WEBGL_color_buffer_float", "WEBGL_depth_texture", "WEBGL_draw_buffers", "EXT_color_buffer_float", "EXT_conservative_depth", "EXT_disjoint_timer_query_webgl2", "EXT_texture_norm16", "NV_shader_noperspective_interpolation", "WEBGL_clip_cull_distance", "EXT_color_buffer_half_float", "EXT_depth_clamp", "EXT_float_blend", "EXT_texture_compression_bptc", "EXT_texture_compression_rgtc", "EXT_texture_filter_anisotropic", "KHR_parallel_shader_compile", "OES_texture_float_linear", "WEBGL_blend_func_extended", "WEBGL_compressed_texture_astc", "WEBGL_compressed_texture_etc", "WEBGL_compressed_texture_etc1", "WEBGL_compressed_texture_s3tc", "WEBGL_compressed_texture_s3tc_srgb", "WEBGL_debug_renderer_info", "WEBGL_debug_shaders", "WEBGL_lose_context", "WEBGL_multi_draw"];
+  return (ctx.getSupportedExtensions() || []).filter(function (ext) {
+    return supportedExtensions.includes(ext);
+  });
 };
 var GL = {
   counter: 1,
@@ -5586,6 +5498,9 @@ var GL = {
     };
     if (ctx.canvas) ctx.canvas.GLctxObject = context;
     GL.contexts[handle] = context;
+    if (typeof webGLContextAttributes.enableExtensionsByDefault == "undefined" || webGLContextAttributes.enableExtensionsByDefault) {
+      GL.initExtensions(context);
+    }
     return handle;
   },
   makeContextCurrent: function makeContextCurrent(contextHandle) {
@@ -5608,6 +5523,29 @@ var GL = {
       GL.contexts[contextHandle].GLctx.canvas.GLctxObject = undefined;
     }
     GL.contexts[contextHandle] = null;
+  },
+  initExtensions: function initExtensions(context) {
+    context || (context = GL.currentContext);
+    if (context.initExtensionsDone) return;
+    context.initExtensionsDone = true;
+    var GLctx = context.GLctx;
+    webgl_enable_ANGLE_instanced_arrays(GLctx);
+    webgl_enable_OES_vertex_array_object(GLctx);
+    webgl_enable_WEBGL_draw_buffers(GLctx);
+    webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance(GLctx);
+    webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance(GLctx);
+    if (context.version >= 2) {
+      GLctx.disjointTimerQueryExt = GLctx.getExtension("EXT_disjoint_timer_query_webgl2");
+    }
+    if (context.version < 2 || !GLctx.disjointTimerQueryExt) {
+      GLctx.disjointTimerQueryExt = GLctx.getExtension("EXT_disjoint_timer_query");
+    }
+    webgl_enable_WEBGL_multi_draw(GLctx);
+    getEmscriptenSupportedExtensions(GLctx).forEach(function (ext) {
+      if (!ext.includes("lose_context") && !ext.includes("debug")) {
+        GLctx.getExtension(ext);
+      }
+    });
   }
 };
 var _glActiveTexture = function _glActiveTexture(x0) {
@@ -6258,12 +6196,6 @@ var writeI53ToI64 = function writeI53ToI64(ptr, num) {
   HEAPU32[ptr >> 2] = num;
   var lower = HEAPU32[ptr >> 2];
   HEAPU32[ptr + 4 >> 2] = (num - lower) / 4294967296;
-};
-var getEmscriptenSupportedExtensions = function getEmscriptenSupportedExtensions(ctx) {
-  var supportedExtensions = ["ANGLE_instanced_arrays", "EXT_blend_minmax", "EXT_disjoint_timer_query", "EXT_frag_depth", "EXT_shader_texture_lod", "EXT_sRGB", "OES_element_index_uint", "OES_fbo_render_mipmap", "OES_standard_derivatives", "OES_texture_float", "OES_texture_half_float", "OES_texture_half_float_linear", "OES_vertex_array_object", "WEBGL_color_buffer_float", "WEBGL_depth_texture", "WEBGL_draw_buffers", "EXT_color_buffer_float", "EXT_conservative_depth", "EXT_disjoint_timer_query_webgl2", "EXT_texture_norm16", "NV_shader_noperspective_interpolation", "WEBGL_clip_cull_distance", "EXT_color_buffer_half_float", "EXT_depth_clamp", "EXT_float_blend", "EXT_texture_compression_bptc", "EXT_texture_compression_rgtc", "EXT_texture_filter_anisotropic", "KHR_parallel_shader_compile", "OES_texture_float_linear", "WEBGL_blend_func_extended", "WEBGL_compressed_texture_astc", "WEBGL_compressed_texture_etc", "WEBGL_compressed_texture_etc1", "WEBGL_compressed_texture_s3tc", "WEBGL_compressed_texture_s3tc_srgb", "WEBGL_debug_renderer_info", "WEBGL_debug_shaders", "WEBGL_lose_context", "WEBGL_multi_draw"];
-  return (ctx.getSupportedExtensions() || []).filter(function (ext) {
-    return supportedExtensions.includes(ext);
-  });
 };
 var webglGetExtensions = function $webglGetExtensions() {
   var exts = getEmscriptenSupportedExtensions(GLctx);
@@ -7827,57 +7759,6 @@ var _emscripten_set_main_loop_arg = function _emscripten_set_main_loop_arg(func,
   };
   setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg);
 };
-var webgl_enable_ANGLE_instanced_arrays = function webgl_enable_ANGLE_instanced_arrays(ctx) {
-  var ext = ctx.getExtension("ANGLE_instanced_arrays");
-  if (ext) {
-    ctx["vertexAttribDivisor"] = function (index, divisor) {
-      return ext["vertexAttribDivisorANGLE"](index, divisor);
-    };
-    ctx["drawArraysInstanced"] = function (mode, first, count, primcount) {
-      return ext["drawArraysInstancedANGLE"](mode, first, count, primcount);
-    };
-    ctx["drawElementsInstanced"] = function (mode, count, type, indices, primcount) {
-      return ext["drawElementsInstancedANGLE"](mode, count, type, indices, primcount);
-    };
-    return 1;
-  }
-};
-var webgl_enable_OES_vertex_array_object = function webgl_enable_OES_vertex_array_object(ctx) {
-  var ext = ctx.getExtension("OES_vertex_array_object");
-  if (ext) {
-    ctx["createVertexArray"] = function () {
-      return ext["createVertexArrayOES"]();
-    };
-    ctx["deleteVertexArray"] = function (vao) {
-      return ext["deleteVertexArrayOES"](vao);
-    };
-    ctx["bindVertexArray"] = function (vao) {
-      return ext["bindVertexArrayOES"](vao);
-    };
-    ctx["isVertexArray"] = function (vao) {
-      return ext["isVertexArrayOES"](vao);
-    };
-    return 1;
-  }
-};
-var webgl_enable_WEBGL_draw_buffers = function webgl_enable_WEBGL_draw_buffers(ctx) {
-  var ext = ctx.getExtension("WEBGL_draw_buffers");
-  if (ext) {
-    ctx["drawBuffers"] = function (n, bufs) {
-      return ext["drawBuffersWEBGL"](n, bufs);
-    };
-    return 1;
-  }
-};
-var webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance = function webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance(ctx) {
-  return !!(ctx.dibvbi = ctx.getExtension("WEBGL_draw_instanced_base_vertex_base_instance"));
-};
-var webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance = function webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance(ctx) {
-  return !!(ctx.mdibvbi = ctx.getExtension("WEBGL_multi_draw_instanced_base_vertex_base_instance"));
-};
-var webgl_enable_WEBGL_multi_draw = function webgl_enable_WEBGL_multi_draw(ctx) {
-  return !!(ctx.multiDrawWebgl = ctx.getExtension("WEBGL_multi_draw"));
-};
 var _emscripten_webgl_enable_extension = function _emscripten_webgl_enable_extension(contextHandle, extension) {
   var context = GL.getContext(contextHandle);
   var extString = UTF8ToString(extension);
@@ -9318,6 +9199,14 @@ var stringToUTF8OnStack = function stringToUTF8OnStack(str) {
   stringToUTF8(str, ret, size);
   return ret;
 };
+function jsStackTrace() {
+  return new Error().stack.toString();
+}
+function stackTrace() {
+  var js = jsStackTrace();
+  if (Module["extraStackTrace"]) js += "\n" + Module["extraStackTrace"]();
+  return js;
+}
 var getCFunc = function getCFunc(ident) {
   var func = Module["_" + ident];
   return func;
@@ -9366,14 +9255,6 @@ var ccall = function ccall(ident, returnType, argTypes, args, opts) {
   ret = onDone(ret);
   return ret;
 };
-function jsStackTrace() {
-  return new Error().stack.toString();
-}
-function stackTrace() {
-  var js = jsStackTrace();
-  if (Module["extraStackTrace"]) js += "\n" + Module["extraStackTrace"]();
-  return js;
-}
 FS.createPreloadedFile = FS_createPreloadedFile;
 FS.staticInit();
 Module["requestFullscreen"] = Browser.requestFullscreen;
@@ -9397,51 +9278,46 @@ for (var i = 0; i < 288; ++i) {
 }
 var wasmImports = {
   b: ___assert_fail,
-  Ph: ___syscall__newselect,
-  Oh: ___syscall_accept4,
-  Nh: ___syscall_bind,
-  Mh: ___syscall_connect,
-  Lh: ___syscall_dup3,
+  Kh: ___syscall__newselect,
+  Jh: ___syscall_accept4,
+  Ih: ___syscall_bind,
+  Hh: ___syscall_connect,
+  Gh: ___syscall_dup3,
   g: ___syscall_fcntl64,
-  Kh: ___syscall_getpeername,
-  Jh: ___syscall_getsockname,
+  Fh: ___syscall_getpeername,
+  Eh: ___syscall_getsockname,
   aa: ___syscall_getsockopt,
-  Ih: ___syscall_ioctl,
-  Hh: ___syscall_listen,
-  Gh: ___syscall_mkdirat,
+  Dh: ___syscall_ioctl,
+  Ch: ___syscall_listen,
+  Bh: ___syscall_mkdirat,
   $: ___syscall_openat,
-  Fh: ___syscall_poll,
-  Eh: ___syscall_readlinkat,
-  Dh: ___syscall_recvfrom,
-  Ch: ___syscall_renameat,
-  Bh: ___syscall_rmdir,
-  Ah: ___syscall_sendto,
+  Ah: ___syscall_poll,
+  zh: ___syscall_readlinkat,
+  yh: ___syscall_recvfrom,
+  xh: ___syscall_renameat,
+  wh: ___syscall_rmdir,
+  vh: ___syscall_sendto,
   va: ___syscall_socket,
-  zh: ___syscall_stat64,
+  uh: ___syscall_stat64,
   _: ___syscall_unlinkat,
-  wh: __emscripten_get_now_is_monotonic,
-  vh: __emscripten_lookup_name,
-  uh: __emscripten_system,
-  th: __emscripten_throw_longjmp,
+  rh: __emscripten_get_now_is_monotonic,
+  qh: __emscripten_lookup_name,
+  ph: __emscripten_system,
+  oh: __emscripten_throw_longjmp,
   Ba: __gmtime_js,
   Aa: __localtime_js,
   za: __mktime_js,
-  sh: __tzset_js,
-  F: _abort,
-  rh: _dmDeviceJSFreeBufferSlots,
-  qh: _dmDeviceJSOpen,
-  ph: _dmDeviceJSQueue,
-  oh: _dmGetDeviceSampleRate,
-  nh: _dmScriptHttpRequestAsync,
-  mh: _dmSysGetApplicationPath,
-  lh: _dmSysGetUserAgent,
-  kh: _dmSysGetUserPersistentDataRoot,
-  jh: _dmSysGetUserPreferredLanguage,
-  ih: _dmSysOpenURL,
+  nh: __tzset_js,
+  Q: _abort,
+  mh: _dmScriptHttpRequestAsync,
+  lh: _dmSysGetApplicationPath,
+  kh: _dmSysGetUserAgent,
+  jh: _dmSysGetUserPersistentDataRoot,
+  ih: _dmSysGetUserPreferredLanguage,
+  hh: _dmSysOpenURL,
   E: _emscripten_asm_const_int,
-  hh: _emscripten_cancel_main_loop,
+  gh: _emscripten_cancel_main_loop,
   D: _emscripten_date_now,
-  gh: _emscripten_get_heap_max,
   ta: _emscripten_get_now,
   fh: _emscripten_glActiveTexture,
   eh: _emscripten_glAttachShader,
@@ -9720,10 +9596,10 @@ var wasmImports = {
   Y: _emscripten_set_main_loop_arg,
   d: _emscripten_webgl_enable_extension,
   ac: _emscripten_webgl_get_current_context,
-  yh: _environ_get,
-  xh: _environ_sizes_get,
+  th: _environ_get,
+  sh: _environ_sizes_get,
   X: _exit,
-  G: _fd_close,
+  F: _fd_close,
   ua: _fd_read,
   Ca: _fd_seek,
   Z: _fd_write,
@@ -9737,9 +9613,9 @@ var wasmImports = {
   s: _glBindRenderbuffer,
   n: _glBindTexture,
   $b: _glBlendFunc,
-  Q: _glBufferData,
+  P: _glBufferData,
   qa: _glBufferSubData,
-  P: _glCheckFramebufferStatus,
+  O: _glCheckFramebufferStatus,
   _b: _glClear,
   Zb: _glClearColor,
   Yb: _glClearDepthf,
@@ -9751,7 +9627,7 @@ var wasmImports = {
   l: _glCompressedTexSubImage2D,
   Vb: _glCompressedTexSubImage3D,
   oa: _glCreateProgram,
-  O: _glCreateShader,
+  N: _glCreateShader,
   Ub: _glCullFace,
   na: _glDeleteBuffers,
   Tb: _glDeleteFramebuffers,
@@ -9778,7 +9654,7 @@ var wasmImports = {
   la: _glGenTextures,
   Eb: _glGetActiveAttrib,
   Db: _glGetActiveUniform,
-  N: _glGetActiveUniformBlockiv,
+  M: _glGetActiveUniformBlockiv,
   ka: _glGetActiveUniformsiv,
   Cb: _glGetAttribLocation,
   c: _glGetError,
@@ -9787,11 +9663,11 @@ var wasmImports = {
   ja: _glGetProgramInfoLog,
   r: _glGetProgramiv,
   ia: _glGetShaderInfoLog,
-  M: _glGetShaderiv,
+  L: _glGetShaderiv,
   y: _glGetString,
   Ab: _glGetUniformBlockIndex,
   zb: _glGetUniformLocation,
-  L: _glLinkProgram,
+  K: _glLinkProgram,
   ha: _glPixelStorei,
   yb: _glPolygonOffset,
   xb: _glReadPixels,
@@ -9806,7 +9682,7 @@ var wasmImports = {
   i: _glTexImage2D,
   qb: _glTexImage3D,
   pb: _glTexParameterf,
-  K: _glTexParameteri,
+  J: _glTexParameteri,
   j: _glTexSubImage2D,
   ob: _glTexSubImage3D,
   nb: _glUniform1i,
@@ -9826,7 +9702,7 @@ var wasmImports = {
   bb: _glfwGetJoystickButtons,
   ab: _glfwGetJoystickDeviceId,
   $a: _glfwGetJoystickHats,
-  J: _glfwGetJoystickParam,
+  I: _glfwGetJoystickParam,
   _a: _glfwGetJoystickPos,
   Za: _glfwGetKey,
   h: _glfwGetMouseButton,
@@ -9853,7 +9729,7 @@ var wasmImports = {
   Ha: _glfwSetWindowIconifyCallback,
   Ga: _glfwSetWindowSize,
   Fa: _glfwSetWindowSizeCallback,
-  I: _glfwShowKeyboard,
+  H: _glfwShowKeyboard,
   Ea: _glfwSwapBuffers,
   ca: _glfwSwapInterval,
   Da: _glfwTerminate,
@@ -9862,7 +9738,7 @@ var wasmImports = {
   R: invoke_iiii,
   ya: invoke_ji,
   xa: invoke_jii,
-  H: invoke_vi,
+  G: invoke_vi,
   u: invoke_vii,
   ba: invoke_viii,
   f: invoke_viiii,
@@ -9872,58 +9748,58 @@ var wasmImports = {
 };
 var wasmExports = createWasm();
 var _wasm_call_ctors = function ___wasm_call_ctors() {
-  return (_wasm_call_ctors = wasmExports["Qh"])();
-};
-var _main = Module["_main"] = function (a0, a1) {
-  return (_main = Module["_main"] = wasmExports["Rh"])(a0, a1);
+  return (_wasm_call_ctors = wasmExports["Lh"])();
 };
 var _dmExportedSymbols = Module["_dmExportedSymbols"] = function () {
-  return (_dmExportedSymbols = Module["_dmExportedSymbols"] = wasmExports["Sh"])();
+  return (_dmExportedSymbols = Module["_dmExportedSymbols"] = wasmExports["Mh"])();
+};
+var _main = Module["_main"] = function (a0, a1) {
+  return (_main = Module["_main"] = wasmExports["Nh"])(a0, a1);
 };
 var _malloc = Module["_malloc"] = function (a0) {
-  return (_malloc = Module["_malloc"] = wasmExports["Th"])(a0);
+  return (_malloc = Module["_malloc"] = wasmExports["Oh"])(a0);
 };
 var _free = Module["_free"] = function (a0) {
-  return (_free = Module["_free"] = wasmExports["Uh"])(a0);
+  return (_free = Module["_free"] = wasmExports["Ph"])(a0);
 };
 var _htonl2 = function _htonl(a0) {
-  return (_htonl2 = wasmExports["Wh"])(a0);
+  return (_htonl2 = wasmExports["Rh"])(a0);
 };
 var _dmScript_Html5ReportOperationSuccess = Module["_dmScript_Html5ReportOperationSuccess"] = function (a0) {
-  return (_dmScript_Html5ReportOperationSuccess = Module["_dmScript_Html5ReportOperationSuccess"] = wasmExports["Xh"])(a0);
+  return (_dmScript_Html5ReportOperationSuccess = Module["_dmScript_Html5ReportOperationSuccess"] = wasmExports["Sh"])(a0);
 };
 var _dmScript_RunInteractionCallback = Module["_dmScript_RunInteractionCallback"] = function () {
-  return (_dmScript_RunInteractionCallback = Module["_dmScript_RunInteractionCallback"] = wasmExports["Yh"])();
+  return (_dmScript_RunInteractionCallback = Module["_dmScript_RunInteractionCallback"] = wasmExports["Th"])();
 };
 var _setTempRet = function setTempRet0(a0) {
-  return (_setTempRet = wasmExports["Zh"])(a0);
+  return (_setTempRet = wasmExports["Uh"])(a0);
 };
 var _htons2 = function _htons(a0) {
-  return (_htons2 = wasmExports["_h"])(a0);
+  return (_htons2 = wasmExports["Vh"])(a0);
 };
 var _ntohs2 = function _ntohs(a0) {
-  return (_ntohs2 = wasmExports["$h"])(a0);
+  return (_ntohs2 = wasmExports["Wh"])(a0);
 };
 var _JSWriteDump = Module["_JSWriteDump"] = function (a0) {
-  return (_JSWriteDump = Module["_JSWriteDump"] = wasmExports["ai"])(a0);
+  return (_JSWriteDump = Module["_JSWriteDump"] = wasmExports["Xh"])(a0);
 };
 var _setThrew2 = function _setThrew(a0, a1) {
-  return (_setThrew2 = wasmExports["bi"])(a0, a1);
+  return (_setThrew2 = wasmExports["Yh"])(a0, a1);
 };
 var _stackSave = function stackSave() {
-  return (_stackSave = wasmExports["ci"])();
+  return (_stackSave = wasmExports["Zh"])();
 };
 var _stackRestore = function stackRestore(a0) {
-  return (_stackRestore = wasmExports["di"])(a0);
+  return (_stackRestore = wasmExports["_h"])(a0);
 };
 var _stackAlloc = function stackAlloc(a0) {
-  return (_stackAlloc = wasmExports["ei"])(a0);
-};
-var dynCall_ji = Module["dynCall_ji"] = function (a0, a1) {
-  return (dynCall_ji = Module["dynCall_ji"] = wasmExports["fi"])(a0, a1);
+  return (_stackAlloc = wasmExports["$h"])(a0);
 };
 var dynCall_jii = Module["dynCall_jii"] = function (a0, a1, a2) {
-  return (dynCall_jii = Module["dynCall_jii"] = wasmExports["gi"])(a0, a1, a2);
+  return (dynCall_jii = Module["dynCall_jii"] = wasmExports["ai"])(a0, a1, a2);
+};
+var dynCall_ji = Module["dynCall_ji"] = function (a0, a1) {
+  return (dynCall_ji = Module["dynCall_ji"] = wasmExports["bi"])(a0, a1);
 };
 function invoke_vii(index, a1, a2) {
   var sp = _stackSave();
