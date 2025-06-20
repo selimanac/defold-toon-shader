@@ -12,3 +12,4 @@ builtins
 *.sublime-workspace
 *.clang-format
 /.editor_settings
+compile_commands.json
