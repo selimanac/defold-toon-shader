@@ -30,3 +30,6 @@ repeat_delay = 0.0
 [profiler]
 track_cpu = 1
 
+[library]
+include_dirs = toon_shader
+
